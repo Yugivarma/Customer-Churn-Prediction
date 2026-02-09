@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction | Telco Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h1>Churn Predictor</h1>
+            </div>
+            <p class="subtitle">AI-Powered Customer Retention Analytics</p>
+        </header>
+
+        <main class="main-content">
+            <form id="prediction-form" class="prediction-form">
+                <!-- Customer Information Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👤</span>
+                        Customer Profile
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                {% for option in feature_options['gender'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="SeniorCitizen">Senior Citizen</label>
+                            <select id="SeniorCitizen" name="SeniorCitizen" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Partner">Partner</label>
+                            <select id="Partner" name="Partner" required>
+                                {% for option in feature_options['Partner'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Dependents">Dependents</label>
+                            <select id="Dependents" name="Dependents" required>
+                                {% for option in feature_options['Dependents'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Account Information Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📊</span>
+                        Account Details
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tenure">Tenure (Months)</label>
+                            <input type="number" id="tenure" name="tenure" min="0" max="72" value="12" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="MonthlyCharges">Monthly Charges ($)</label>
+                            <input type="number" id="MonthlyCharges" name="MonthlyCharges" step="0.01" min="0" value="50.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="TotalCharges">Total Charges ($)</label>
+                            <input type="number" id="TotalCharges" name="TotalCharges" step="0.01" min="0" value="600.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Contract">Contract Type</label>
+                            <select id="Contract" name="Contract" required>
+                                {% for option in feature_options['Contract'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Phone Services Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📱</span>
+                        Phone Services
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="PhoneService">Phone Service</label>
+                            <select id="PhoneService" name="PhoneService" required>
+                                {% for option in feature_options['PhoneService'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="MultipleLines">Multiple Lines</label>
+                            <select id="MultipleLines" name="MultipleLines" required>
+                                {% for option in feature_options['MultipleLines'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Internet Services Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🌐</span>
+                        Internet Services
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="InternetService">Internet Service</label>
+                            <select id="InternetService" name="InternetService" required>
+                                {% for option in feature_options['InternetService'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="OnlineSecurity">Online Security</label>
+                            <select id="OnlineSecurity" name="OnlineSecurity" required>
+                                {% for option in feature_options['OnlineSecurity'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="OnlineBackup">Online Backup</label>
+                            <select id="OnlineBackup" name="OnlineBackup" required>
+                                {% for option in feature_options['OnlineBackup'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="DeviceProtection">Device Protection</label>
+                            <select id="DeviceProtection" name="DeviceProtection" required>
+                                {% for option in feature_options['DeviceProtection'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="TechSupport">Tech Support</label>
+                            <select id="TechSupport" name="TechSupport" required>
+                                {% for option in feature_options['TechSupport'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="StreamingTV">Streaming TV</label>
+                            <select id="StreamingTV" name="StreamingTV" required>
+                                {% for option in feature_options['StreamingTV'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="StreamingMovies">Streaming Movies</label>
+                            <select id="StreamingMovies" name="StreamingMovies" required>
+                                {% for option in feature_options['StreamingMovies'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Billing Section -->
+                <section class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">💳</span>
+                        Billing Information
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="PaperlessBilling">Paperless Billing</label>
+                            <select id="PaperlessBilling" name="PaperlessBilling" required>
+                                {% for option in feature_options['PaperlessBilling'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="PaymentMethod">Payment Method</label>
+                            <select id="PaymentMethod" name="PaymentMethod" required>
+                                {% for option in feature_options['PaymentMethod'] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <span class="btn-text">Analyze Churn Risk</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg class="spinner" viewBox="0 0 50 50">
+                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                        </svg>
+                    </span>
+                </button>
+            </form>
+
+            <!-- Results Section -->
+            <div id="results" class="results-container" style="display: none;">
+                <div class="results-header">
+                    <h2>Prediction Results</h2>
+                </div>
+                <div class="results-content">
+                    <div class="result-card main-result">
+                        <div class="result-icon" id="result-icon">
+                            <!-- Icon will be set by JavaScript -->
+                        </div>
+                        <div class="result-info">
+                            <span class="result-label">Churn Prediction</span>
+                            <span class="result-value" id="prediction-result">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="probability-charts">
+                        <div class="probability-card churn-prob">
+                            <div class="prob-header">
+                                <span class="prob-label">Churn Risk</span>
+                                <span class="prob-value" id="churn-prob">0%</span>
+                            </div>
+                            <div class="prob-bar-container">
+                                <div class="prob-bar churn-bar" id="churn-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="probability-card retain-prob">
+                            <div class="prob-header">
+                                <span class="prob-label">Retention Rate</span>
+                                <span class="prob-value" id="retain-prob">0%</span>
+                            </div>
+                            <div class="prob-bar-container">
+                                <div class="prob-bar retain-bar" id="retain-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="risk-indicator" id="risk-indicator">
+                        <span class="risk-badge" id="risk-badge">-</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Powered by XGBoost Machine Learning | Model Accuracy: 95%</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
