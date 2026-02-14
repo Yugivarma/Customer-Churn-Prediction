@@ -58,7 +58,7 @@ The primary objective of this project is to predict customer churn, empowering b
 ## ▶️ Running the Application
 
 ### 1️⃣ Install Dependencies
-Ensure you have Flask installed. If not, install it using pip install Flask.
+Ensure you have Flask installed. If not, install it using `pip install Flask`.
 
 ### 2️⃣ Run the Flask App
 Run the application script using python app.py in the Anaconda Prompt.
