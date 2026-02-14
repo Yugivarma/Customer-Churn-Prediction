@@ -64,7 +64,7 @@ Ensure you have Flask installed. If not, install it using pip install Flask.
 Run the application script using python app.py in the Anaconda Prompt.
 
 ### 3️⃣ Open in Browser
-[http](http://127.0.0.1:5000)
+(http://127.0.0.1:5000)
 
 You can now test real-time churn predictions.
 
